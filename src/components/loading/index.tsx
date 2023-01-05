@@ -7,7 +7,7 @@ export function Loading(){
         <>
             <StyleLoading>
                 <img src={loadingSpotifyGif} alt=""/>
-                <br />
+                <br />  
                 <img src={loadingGif} alt="" className="loadingIcon"/>
             </StyleLoading>
         </>
