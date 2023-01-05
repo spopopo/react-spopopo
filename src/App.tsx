@@ -1,6 +1,6 @@
 import './App.css';
 import UserInfo from './pages/userInfo/index';
-import UserAccess from './pages/userAcess';
+import UserAccess from './pages/userAccess';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {

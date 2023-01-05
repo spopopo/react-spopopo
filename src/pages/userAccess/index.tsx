@@ -1,3 +1,7 @@
+import { Background } from "../../components/Background"
+import { StyledUserAccess } from "./style"
+import spotifyLogo from '../../assets/logo.png'
+
 const UserAccess = () => {
     const client_id = '1ab6ed6e5839430c8d6f235f05e10689'
     const client_secret = '4338d4c231c541d490e7a3c42d6e58c7'
@@ -13,10 +17,14 @@ const UserAccess = () => {
     const authorizeLink = 'https://accounts.spotify.com/authorize?' + auth
 
     return(
-        <>
-            <p>token</p>
-            <button onClick={() => {window.location.href = authorizeLink}}>log-in</button>
-        </>
+        <StyledUserAccess>
+        <Background>
+            <img src={spotifyLogo} alt="logo" style={{width: '60px'}}/>
+            <h1>Vamos Começar?</h1> 
+            <h3 style={{width: '290px'}}>Pronto para ver os dados das suas contas?</h3>
+            <button onClick={() => {window.location.href = authorizeLink }} className='bttn'>log-in</button>
+        </ Background>
+        </StyledUserAccess>
     )
 }
 

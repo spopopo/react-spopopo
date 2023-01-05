@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef} from "react"
 import { playlistsStore, userStore, tokenStore, currentSongStore, createPlaylistStore } from '../../store/store'
-import { Loading } from "../../components/loading"
+import { Loading } from "../../components/Loading"
+import { StyledUserInfo } from "./style"
+import { Background } from "../../components/Background"
 
 const UserInfo = () => {
     const [createdPlaylist, setCreatedPlaylist] = useState('') 
@@ -49,7 +51,7 @@ const UserInfo = () => {
 
     useEffect(() => {
         if(!localStorage.getItem('token') && tokenData.access_token !== undefined){
-            // localStorage.setItem('token', tokenData.access_token)
+            localStorage.setItem('token', tokenData.access_token)
         }
         if(localStorage.getItem('token') !== undefined && localStorage.getItem('token')){
             fetchUser('https://api.spotify.com/v1/me', localStorage.getItem('token'), 'GET')
@@ -85,11 +87,19 @@ const UserInfo = () => {
         }
     }, [currentSongData])
 
+    useEffect(() => {
+        console.log(userData);
+        
+    }, [userData])
+
     return(
         <>
         {!playlistData.href ? <Loading /> : 
-        <div>
-            <p>Olá {userData.display_name} {userData.followers.total}</p>
+        <StyledUserInfo>
+            <div className="user">
+                <img src={userData.images[0].url} alt="" className="userPicture"/>
+                <h1>Olá <span style={{color: '#1DCC5A'}}>{userData.display_name}</span> :)</h1>
+            </div>
             <div ref={playlistRef}></div>
             <div ref={playlistMusicRef}></div>
 
@@ -99,7 +109,7 @@ const UserInfo = () => {
 
             {/* <input type="text" onChange={(e) => {setCreatedPlaylist(e.target.value)}}/> */}
             <button onClick={logOut}>logout</button>
-        </div>
+        </StyledUserInfo>
         }
         </>
     )

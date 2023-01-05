@@ -6,9 +6,13 @@ const StyleLoading = styled('div')({
     color: 'white',
     display: 'flex',
     justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
     "& .loadingIcon": {
-        width: '50px'
+        width: '20px'
+    },
+    "& .loadingSpotify": {
+        width: '500px', 
     }
 })
 
