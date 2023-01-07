@@ -1,4 +1,5 @@
 import { styled } from '@mui/system'
+import { Background } from '../../components/Background'
 
 const StyledUserInfo = styled('div')({
     color: 'white',
@@ -13,7 +14,16 @@ const StyledUserInfo = styled('div')({
     "& .userPicture": {
         borderRadius: '200px',
         width: '100px',
-        border: '1px solid '
+        cursor: 'pointer'
+    },
+    "& .hide": {
+        position: 'absolute',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: 'rgb(0,0,0,0.35)',
+        display: 'none',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 

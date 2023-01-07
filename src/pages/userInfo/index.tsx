@@ -1,12 +1,13 @@
-import { useEffect, useState, useRef} from "react"
+import { useEffect, useState, useRef } from "react"
 import { playlistsStore, userStore, tokenStore, currentSongStore, createPlaylistStore } from '../../store/store'
-import { Loading } from "../../components/Loading"
+import { Loading } from "../../components/Loading/index"
 import { StyledUserInfo } from "./style"
 import { Background } from "../../components/Background"
+import noPicture from "../../assets/noPicture.jpeg"
 
 const UserInfo = () => {
-    const [createdPlaylist, setCreatedPlaylist] = useState('') 
-    
+    const [createdPlaylist, setCreatedPlaylist] = useState('')
+
     const tokenData = tokenStore((state: any) => state.token)
     const fetchToken = tokenStore((state: any) => state.fetch)
 
@@ -24,6 +25,7 @@ const UserInfo = () => {
 
     const playlistRef: any = useRef("")
     const playlistMusicRef: any = useRef("")
+    const userInfoHide: any = useRef("")
 
     const client_id = '1ab6ed6e5839430c8d6f235f05e10689'
     const client_secret = '4338d4c231c541d490e7a3c42d6e58c7'
@@ -36,39 +38,53 @@ const UserInfo = () => {
         redirect_uri: redirect_uri
     })
 
-    function logOut(){
+    function logOut() {
         localStorage.clear()
         window.location.href = 'http://localhost:5500'
     }
 
+    // const objTeste =  new URLSearchParams({
+    //     grant_type: 'refresh_token',
+    //     refresh_token: String(localStorage.getItem('refresh_token'))
+    // })
+
     useEffect(() => {
-        if(!localStorage.getItem('token')){
+        if (!localStorage.getItem('token')) {
             fetchToken('https://accounts.spotify.com/api/token', 'POST', client_id, client_secret, tokenObj)
-        } else {
-            console.log('ola');
         }
+        // setTimeout(() => {
+        //     fetch('https://accounts.spotify.com/api/token', {
+        //     method: 'POST',
+        //     headers: {
+        //         "Authorization": 'Basic ' + btoa(`${client_id}:${client_secret}`),
+        //         "Content-Type": "application/x-www-form-urlencoded"
+        //     },
+        //     body: objTeste
+        // }).then(response => response.json().then((data) => {console.log(data);
+        // }))}, 5000)
     }, [])
 
     useEffect(() => {
-        if(!localStorage.getItem('token') && tokenData.access_token !== undefined){
+        if (!localStorage.getItem('token') && tokenData.access_token !== undefined) {
             localStorage.setItem('token', tokenData.access_token)
+            localStorage.setItem('refresh_token', tokenData.refresh_token)
         }
-        if(localStorage.getItem('token') !== undefined && localStorage.getItem('token')){
+        if (localStorage.getItem('token') !== undefined && localStorage.getItem('token')) {
             fetchUser('https://api.spotify.com/v1/me', localStorage.getItem('token'), 'GET')
             fetchPlaylist('https://api.spotify.com/v1/me/playlists', localStorage.getItem('token'), 'GET')
             fetchCurrentSong('https://api.spotify.com/v1/me/player/currently-playing', localStorage.getItem('token'), 'GET')
-        }   
+        }
     }, [tokenData])
 
     useEffect(() => {
-        if(playlistData.href !== undefined){    
+        if (playlistData.href !== undefined) {
             playlistData.items.map((el: any) => {
                 let playlist = document.createElement('button')
                 playlist.textContent = el.name
                 playlist.addEventListener('click', () => {
                     fetch(`https://api.spotify.com/v1/playlists/${el.id}/tracks`, {
                         method: 'GET',
-                        headers:{
+                        headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     }).then(reponse => reponse.json().then(data => {
@@ -82,35 +98,57 @@ const UserInfo = () => {
     }, [playlistData])
 
     useEffect(() => {
-        if(currentSongData.item !== undefined){
+        if (currentSongData.item !== undefined) {
             fetchCurrentSong('https://api.spotify.com/v1/me/player/currently-playing', localStorage.getItem('token'), 'GET')
         }
     }, [currentSongData])
 
     useEffect(() => {
         console.log(userData);
-        
+
     }, [userData])
 
-    return(
-        <>
-        {!playlistData.href ? <Loading /> : 
-        <StyledUserInfo>
-            <div className="user">
-                <img src={userData.images[0].url} alt="" className="userPicture"/>
-                <h1>Olá <span style={{color: '#1DCC5A'}}>{userData.display_name}</span> :)</h1>
-            </div>
-            <div ref={playlistRef}></div>
-            <div ref={playlistMusicRef}></div>
-
-            {currentSongData.item === undefined || currentSongData.item === null ? 
-            <p>não ouvindo nada</p> : 
-            <p>Playing: {currentSongData.item.name}</p>}
-
-            {/* <input type="text" onChange={(e) => {setCreatedPlaylist(e.target.value)}}/> */}
-            <button onClick={logOut}>logout</button>
-        </StyledUserInfo>
+    window.onclick = function (event) {
+        if (event.target == userInfoHide.current) {
+            userInfoHide.current.style.display = "none";
         }
+    }
+
+    return (
+        <>
+            {!playlistData.href ? <Loading /> :
+                <StyledUserInfo>
+                    <div className="hide" ref={userInfoHide} id='modal'>
+                        <Background onClick={() => { console.log('ola222') }}>
+                            <h2>{userData.display_name}</h2>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ marginRight: '30px' }}>
+                                    <p>seguidores: {userData.followers.total}</p>
+                                    <p>id: {userData.id}</p>
+                                </div>
+                                <div>
+                                    <p>{userData.country}</p>
+                                    <p>{userData.email}</p>
+                                </div>
+                            </div>
+                            <a href={userData.external_urls.spotify} target='_blank'><button className="bttn">Perfil</button></a>
+                        </Background>
+                    </div>
+                    <div className="user">
+                        {!userData.images[0] ? <img src={noPicture} alt="" className="userPicture" onClick={() => { userInfoHide.current.style.display = 'flex' }} /> : <img src={userData.images[0].url} alt="" className="userPicture" onClick={() => { userInfoHide.current.style.display = 'flex' }} />}
+                        <h1>Olá <span style={{ color: '#1DCC5A' }}>{userData.display_name}</span> :)</h1>
+                    </div>
+                    <div ref={playlistRef}></div>
+                    <div ref={playlistMusicRef}></div>
+
+                    {currentSongData.item === undefined || currentSongData.item === null ?
+                        <p>não ouvindo nada</p> :
+                        <p>Playing: {currentSongData.item.name}</p>}
+
+                    {/* <input type="text" onChange={(e) => {setCreatedPlaylist(e.target.value)}}/> */}
+                    <button onClick={logOut}>logout</button>
+                </StyledUserInfo>
+            }
         </>
     )
 }
