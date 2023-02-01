@@ -4,7 +4,7 @@ import { Background } from '../../components/Background'
 const StyledUserInfo = styled('div')({
     color: 'white',
     "& .user": {
-        backgroundImage: 'linear-gradient(to bottom, #360140, #161616)',
+        backgroundImage: 'linear-gradient(to bottom, #494949, #161616)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

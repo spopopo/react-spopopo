@@ -1,6 +1,6 @@
 import { styled } from '@mui/system'
 
-const StyleLoading = styled('div')({
+export const StyleLoading = styled('div')({
     height: '100vh', 
     width: '100bvw',   
     color: 'white',
@@ -15,5 +15,3 @@ const StyleLoading = styled('div')({
         width: '500px', 
     }
 })
-
-export { StyleLoading }

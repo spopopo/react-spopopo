@@ -1,6 +1,6 @@
 import { styled } from '@mui/system'
 
-const StyledBackground = styled('div')({
+export const StyledBackground = styled('div')({
     backgroundColor: "rgb(0, 0, 0, 0.8)",
     width: 'fit-content',
     height: 'fit-content',
@@ -21,5 +21,3 @@ const StyledBackground = styled('div')({
         cursor: 'pointer'
     }
 })
-
-export { StyledBackground }

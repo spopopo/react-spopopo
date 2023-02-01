@@ -1,5 +1,7 @@
 import { StyledBackground } from "./style"
-import { BackgroundType } from "./entities"
+
+type BackgroundType = {
+} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>
 
 export function Background({children, ...props}: BackgroundType) {
     return(

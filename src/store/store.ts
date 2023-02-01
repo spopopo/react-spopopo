@@ -80,11 +80,28 @@ export const musicPlaylistStore = create((set) => ({
         const reponse = await fetch(url, {
             method: methodUser,
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
         })
         const data = await reponse.json()
         set({musicsPlaylist: data})
+    }
+}))
+
+export const useProjectsStore = create((set) => ({
+    projects: [],
+    fetch: async (url: string) => {
+        const reponse = await axios.get(url)
+        set({projects: await reponse.data})
+    }
+}))
+
+export const useProjectsStoreFiltred = create((set) => ({
+    projects: [],
+    fetch: async (url: string) => {
+        const reponse = await axios.get(url)
+        set({projects: await reponse.data})
     }
 }))
 
