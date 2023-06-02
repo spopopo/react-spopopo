@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { playlistsStore, userStore, tokenStore, currentSongStore, createPlaylistStore } from '../../store/store'
-import { Loading } from "../../components/Loading/index"
+import { Loading } from "../../components/loading/index"
 import { StyledUserInfo } from "./style"
 import { Background } from "../../components/Background"
 import noPicture from "../../assets/noPicture.jpeg"
